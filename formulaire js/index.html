@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulaire d'inscription</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form id="inscriptionForm">
+    <h2>Inscription</h2>
+
+    <label for="nom">Nom :</label>
+    <input type="text" id="nom" name="nom">
+    <div class="error" id="error-nom"></div>
+
+    <label for="prenom">Prénom :</label>
+    <input type="text" id="prenom" name="prenom">
+    <div class="error" id="error-prenom"></div>
+
+    <label for="email">Adresse e-mail :</label>
+    <input type="email" id="email" name="email">
+    <div class="error" id="error-email"></div>
+
+    <label for="password">Mot de passe :</label>
+    <input type="password" id="password" name="password">
+    <div class="error" id="error-password"></div>
+
+    <label for="confirmPassword">Confirmer le mot de passe :</label>
+    <input type="password" id="confirmPassword" name="confirmPassword">
+    <div class="error" id="error-confirmPassword"></div>
+
+    <input type="submit" value="S'inscrire">
+    <div class="success" id="success-message"></div>
+  </form>
+
+  <script>
+    const form = document.getElementById("inscriptionForm");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault(); // Empêche l’envoi par défaut
+      let isValid = true;
+
+      // Réinitialiser les messages d’erreur
+      document.querySelectorAll(".error").forEach(el => el.textContent = "");
+      document.getElementById("success-message").textContent = "";
+
+      // Récupérer les valeurs
+      const nom = document.getElementById("nom").value.trim();
+      const prenom = document.getElementById("prenom").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      // 1. Tous les champs doivent être remplis
+      if (nom === "") {
+        document.getElementById("error-nom").textContent = "Le nom est requis.";
+        isValid = false;
+      }
+      if (prenom === "") {
+        document.getElementById("error-prenom").textContent = "Le prénom est requis.";
+        isValid = false;
+      }
+      if (email === "") {
+        document.getElementById("error-email").textContent = "L'e-mail est requis.";
+        isValid = false;
+      }
+      if (password === "") {
+        document.getElementById("error-password").textContent = "Le mot de passe est requis.";
+        isValid = false;
+      }
+      if (confirmPassword === "") {
+        document.getElementById("error-confirmPassword").textContent = "Veuillez confirmer le mot de passe.";
+        isValid = false;
+      }
+
+      // 2. Vérifier le format de l’e-mail
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (email !== "" && !emailRegex.test(email)) {
+        document.getElementById("error-email").textContent = "Format d'e-mail invalide.";
+        isValid = false;
+      }
+
+      // 3. Vérifier la complexité du mot de passe
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+      if (password !== "" && !passwordRegex.test(password)) {
+        document.getElementById("error-password").textContent =
+          "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.";
+        isValid = false;
+      }
+
+      // 4. Vérifier la confirmation du mot de passe
+      if (password !== confirmPassword) {
+        document.getElementById("error-confirmPassword").textContent =
+          "Les mots de passe ne correspondent pas.";
+        isValid = false;
+      }
+
+      // 5. Si tout est valide
+      if (isValid) {
+        document.getElementById("success-message").textContent = "✅ Inscription réussie !";
+        form.reset(); // Réinitialise le formulaire
+      }
+    });
+  </script>
+
+</body>
+</html>
